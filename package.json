@@ -1,0 +1,52 @@
+{
+  "name": "svgjelly",
+  "version": "1.0.0-beta",
+  "description": "A react component to turn svg into jelly",
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "jsnext:main": "index.js",
+  "scripts": {
+    "start": "rm -fr lib/ && babel src -d lib",
+    "flow": "flow",
+    "lint": "eslint src",
+    "test": "jest --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lionelB/svgjelly.git"
+  },
+  "keywords": [
+    "svg",
+    "jelly",
+    "react"
+  ],
+  "author": "lionelB",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lionelB/svgjelly/issues"
+  },
+  "homepage": "https://github.com/lionelB/svgjelly#readme",
+  "dependencies": {
+    "abs-svg-path": "^0.1.1",
+    "normalize-svg-path": "^0.1.0",
+    "parse-svg-path": "^0.1.2",
+    "react": "^15.4.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-eslint": "^7.1.1",
+    "babel-jest": "^18.0.0",
+    "babel-plugin-syntax-flow": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.23.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-env": "^1.1.8",
+    "babel-preset-react": "^6.23.0",
+    "eslint": "^3.15.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-react": "^6.10.0",
+    "flow-bin": "^0.39.0"
+  }
+}
