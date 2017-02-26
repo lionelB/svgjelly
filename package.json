@@ -8,7 +8,8 @@
   "main": "lib/index.js",
   "jsnext:main": "index.js",
   "scripts": {
-    "start": "rm -fr lib/ && babel src -d lib",
+    "start": "rm -fr lib/ && babel src -d lib --ignore='*.spec.js'",
+
     "flow": "flow",
     "lint": "eslint src",
     "test": "jest --verbose"
@@ -31,13 +32,16 @@
   "dependencies": {
     "abs-svg-path": "^0.1.1",
     "normalize-svg-path": "^0.1.0",
-    "parse-svg-path": "^0.1.2",
+    "parse-svg-path": "^0.1.2"
+  },
+  "peerDependencies": {
     "react": "^15.4.2"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-eslint": "^7.1.1",
     "babel-jest": "^18.0.0",
+    "babel-loader": "^6.3.2",
     "babel-plugin-syntax-flow": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.23.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
@@ -47,6 +51,7 @@
     "eslint": "^3.15.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-react": "^6.10.0",
-    "flow-bin": "^0.39.0"
+    "flow-bin": "^0.39.0",
+    "jest": "^19.0.0",
   }
 }

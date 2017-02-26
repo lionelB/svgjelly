@@ -1,120 +1,31 @@
 /* @flow */
 import React from "react"
 
-type MouseCoord = {
-  mouseX: number,
-  mouseY: number
-}
-export default class SVGelly extends React.Component {
+import JellyPath from "./PathTag"
+import SVGJelly from "./SvgTag"
 
-  position: MouseCoord
-
-  state: {
-    mouseX: number,
-    mouseY: number,
-    hovered: boolean,
+const walk = childrenEl => React.Children.map(childrenEl, child => {
+  const children = child.props && child.props.children && walk(child.props.children)
+  // node to replace
+  if (child.type === "path") {
+    return React.createElement(JellyPath, { ...child.props })
   }
-
-  animationId: number
-
-  svg: HTMLElement
-
-  constructor() {
-    super()
-    this.position = {
-      mouseX: 0,
-      mouseY: 0,
-    }
-
-    this.state = {
-      mouseX: 0,
-      mouseY: 0,
-      hovered: false,
-    }
+  // other node
+  else if (child.type) {
+    return React.cloneElement(child, { ...child.props }, children)
   }
+  // text child
+  return child
+})
 
-  getChildContext() {
-    return {
-      mouseX: this.position.mouseX,
-      mouseY: this.position.mouseY,
-      hovered: this.state.hovered,
-    }
-  }
-  componentDidMount() {
-    this.updatePosition()
-  }
+const isClassComponent = Component => Component.prototype.hasOwnProperty("render")
 
-  updatePosition = () => {
-    this.setState({
-      mouseX: this.position.mouseX,
-      mouseY: this.position.mouseY,
-      hovered: this.state.hovered,
-    })
-    this.animationId = requestAnimationFrame(this.updatePosition)
-  }
-
-  componentWillUnmount() {
-    cancelAnimationFrame(this.animationId)
-  }
-
-  onMouseEnter = () => {
-    this.setState({
-      hovered: true,
-    })
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      hovered: false,
-    })
-  }
-  onTouchMove = (event: SyntheticTouchEvent) => {
-    event.preventDefault()
-    const svgRect = this.svg.getBoundingClientRect()
-    const mouseX = Math.round(event.touches[0].clientX - svgRect.left)
-    const mouseY = Math.round(event.touches[0].clientY - svgRect.top)
-    this.position = {
-      mouseX,
-      mouseY,
-    }
-  }
-  onMouseMove = (event: SyntheticMouseEvent) => {
-    event.preventDefault()
-    const svgRect = this.svg.getBoundingClientRect()
-    const mouseX = Math.round(event.clientX - svgRect.left)
-    const mouseY = Math.round(event.clientY - svgRect.top)
-    this.position = {
-      mouseX,
-      mouseY,
-    }
-  }
-
-  render() {
-    const props = {
-      ...this.props,
-      ref: svg => { this.svg = svg },
-      onMouseEnter: this.onMouseEnter,
-      onMouseLeave: this.onMouseLeave,
-      onMouseMove: this.onMouseMove,
-      onTouchStart: this.onMouseEnter,
-      onTouchMove: this.onTouchMove,
-      onTouchEnd: this.onMouseLeave,
-    }
-
-    return (
-    <svg {...props}>
-      { props.children }
-    </svg>
-    )
-  }
+export const SvgJelly = (SVGComponent: Function) => {
+  const tree = isClassComponent(SVGComponent) ? SVGComponent() : new SVGComponent()
+  const children = walk(tree.props.children)
+  return (props: Props) => React.createElement(SVGJelly, { ...tree.props, ...props }, children)
 }
 
-SVGelly.propTypes = {
-  debug: React.PropTypes.bool,
-}
-
-SVGelly.childContextTypes = {
-  mouseX: React.PropTypes.number,
-  mouseY: React.PropTypes.number,
-  hovered: React.PropTypes.bool,
+type Props = {
+  children: any[]
 }

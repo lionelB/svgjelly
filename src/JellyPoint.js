@@ -1,18 +1,7 @@
 /* @flow */
-export const jellyConfig: Config = {
-  radius: 75,
-  elasticity: 3,
-  viscosity: .05,
-  damping: .9,
-}
+import type { Config } from "./config"
 
 type Command = ['M' | 'C', number, number, number, number, number, number, number]
-
-export const pointsToString  = ([start, ...points]: Command[]) => {
-  const [command, x0, y0] = start
-  const path = points.map(([letter, x, y, cx1, cy1, cx2, cy2]: Command) => `${letter}${x},${y} ${cx1},${cy1} ${cx2},${cy2}`).join(" ")
-  return `${command}${x0},${y0} ${path}`
-}
 
 class Point {
   x: number
@@ -111,11 +100,4 @@ export class JellyPoint {
       return `${this.command}${this.x},${this.y} ${this.x},${this.y} ${this.x},${this.y}`
     }
   }
-}
-
-type Config = {
-  damping: number,
-  elasticity: number,
-  radius: number,
-  viscosity: number,
 }

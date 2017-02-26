@@ -1,13 +1,12 @@
 /* @flow */
 import React from "react"
 
+import { jellyConfig } from "./config"
+
 import abs from "abs-svg-path"
 import normalize from "normalize-svg-path"
 import parse from "parse-svg-path"
-import {
-  jellyConfig,
-  JellyPoint,
-} from "./jellify"
+import { JellyPoint } from "./JellyPoint"
 
 export default class JellyPath extends React.Component {
   points: JellyPoint[];
@@ -26,7 +25,7 @@ export default class JellyPath extends React.Component {
       d: path,
     }
     return (
-      <path {...props}/>
+      <path {...props} />
     )
   }
 }
