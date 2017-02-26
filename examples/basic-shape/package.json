@@ -1,0 +1,18 @@
+{
+  "name": "basic-shape",
+  "version": "1.0.0",
+  "license": "ISC",
+  "scripts": {
+    "start": "webpack-dev-server --port 3000 --content-base=. --inline --hot --open"
+  },
+  "devDependencies": {
+    "babel-core":"^6.0.0",
+    "babel-loader": "^6.3.2",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.1"
+  },
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  }
+}
