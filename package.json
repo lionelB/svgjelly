@@ -11,7 +11,8 @@
     "start": "rm -fr lib/ && babel src -d lib --ignore='*.spec.js'",
     "flow": "flow",
     "lint": "eslint src",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "deploy": "gh-pages -d examples/basic-shape/dist"
   },
   "repository": {
     "type": "git",
@@ -51,6 +52,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-react": "^6.10.0",
     "flow-bin": "^0.39.0",
+    "gh-pages": "^0.12.0",
     "jest": "^19.0.2"
   }
 }
