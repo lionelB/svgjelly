@@ -19,7 +19,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      SvgJelly: path.resolve(__dirname, "../../lib/index.js"),
+      SvgJelly: path.resolve(__dirname, "../../src/index.js"),
     },
   },
 }

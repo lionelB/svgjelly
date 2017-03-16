@@ -3,8 +3,10 @@ import ReactDOM from "react-dom"
 
 import { SvgJelly } from "SvgJelly"
 import Shape from "./Shape"
+import Meteor from "./Meteor"
+import Europe from "./Europe"
 
-const JellyShape = SvgJelly(Shape)
+const Jelly = SvgJelly(Europe)
 
 const styles = {
   container: {
@@ -18,7 +20,7 @@ const styles = {
 
 ReactDOM.render(
   <div style={styles.container}>
-    <JellyShape debug width="100%" height="100%" />
+    <Jelly width="100%" height="100%" />
   </div>
   ,
   document.getElementById("root")
