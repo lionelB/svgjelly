@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "license": "ISC",
   "scripts": {
-    "start": "webpack-dev-server --port 3000 --content-base=. --inline --hot --open"
+    "start": "webpack-dev-server --port 3000 --content-base=./dist --hot --open",
+    "build": "webpack -p"
   },
   "devDependencies": {
     "babel-core":"^6.0.0",

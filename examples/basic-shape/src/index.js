@@ -2,8 +2,9 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import { SvgJelly } from "SvgJelly"
-import Shape from "./Shape"
-import Meteor from "./Meteor"
+
+// import Shape from "./Shape"
+// import Meteor from "./Meteor"
 import Europe from "./Europe"
 
 const Jelly = SvgJelly(Europe)
