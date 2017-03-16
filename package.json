@@ -9,7 +9,6 @@
   "jsnext:main": "index.js",
   "scripts": {
     "start": "rm -fr lib/ && babel src -d lib --ignore='*.spec.js'",
-
     "flow": "flow",
     "lint": "eslint src",
     "test": "jest --verbose"
@@ -39,9 +38,9 @@
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
+    "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
     "babel-jest": "^18.0.0",
-    "babel-loader": "^6.3.2",
     "babel-plugin-syntax-flow": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.23.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
@@ -52,6 +51,6 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-react": "^6.10.0",
     "flow-bin": "^0.39.0",
-    "jest": "^19.0.0",
+    "jest": "^19.0.2"
   }
 }
