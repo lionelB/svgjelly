@@ -1,7 +1,7 @@
 /* @flow */
 import type { Config } from "./config"
 
-type Command = ['M' | 'C', number, number, number, number, number, number, number]
+type PathPoint = ['M' | 'C', number, number, number, number, number, number, number]
 
 class Point {
   x: number
@@ -45,7 +45,7 @@ export class JellyPoint {
 
   settings: Config
 
-  constructor([command, ...coord]: Command, settings: Config) {
+  constructor([command, ...coord]: PathPoint, settings: Config) {
     this.command = command
     if (command === "M") {
       const [x, y] = coord

@@ -23,8 +23,8 @@ export default class SVGelly extends React.Component {
 
   animationId: number
 
-  svg: SVGSVGElement
-  origin: SVGRect
+  svg: any
+  origin: any
 
   constructor() {
     super()
