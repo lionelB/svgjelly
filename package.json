@@ -3,7 +3,9 @@
   "version": "1.0.0-beta",
   "description": "A react component to turn svg into jelly",
   "files": [
-    "lib"
+    "lib",
+    "src",
+    "!**/*.spec.js"
   ],
   "main": "lib/index.js",
   "jsnext:main": "index.js",
