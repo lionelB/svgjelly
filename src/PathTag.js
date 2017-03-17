@@ -6,19 +6,31 @@ import { jellyConfig } from "./config"
 import abs from "abs-svg-path"
 import normalize from "normalize-svg-path"
 import parse from "parse-svg-path"
-import { JellyPoint } from "./JellyPoint"
+
+import type { WobblyPoint } from "./types"
+
+import {
+  toWobblyPoints,
+  updatePoints,
+  pointsToSvg,
+} from "./JellyPoint"
 
 export default class JellyPath extends React.Component {
-  points: JellyPoint[];
+  points: WobblyPoint[];
 
   constructor(props: Props) {
     super(props)
-    this.points = normalize(abs(parse(props.d))).map(el => new JellyPoint(el, jellyConfig))
+    this.points = toWobblyPoints(normalize(abs(parse(props.d))))
   }
 
   render() {
-    this.points.forEach(p => p.update(this.context.mouseX, this.context.mouseY))
-    const path = this.points.map(p => p.toSVG()).join(" ")
+    const mouseCoord = {
+      mouseX: this.context.mouseX,
+      mouseY: this.context.mouseY,
+    }
+
+    updatePoints(mouseCoord, jellyConfig, this.points)
+    const path = pointsToSvg(this.points)
 
     const props = {
       ...this.props,

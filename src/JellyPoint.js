@@ -1,103 +1,85 @@
 /* @flow */
-import type { Config } from "./config"
+import type { Config, MouseCoord, SvgSegment, WobblyPoint } from "./types"
 
-type PathPoint = ['M' | 'C', number, number, number, number, number, number, number]
+export function toWobblyPoints(points: SvgSegment[]): WobblyPoint[] {
+  const wobblyPoints = []
+  const dx = 0
+  const dy = 0
 
-class Point {
-  x: number
-  y: number
+  for (let i = 0; i < points.length; i++) {
+    const [command, ...coord] = points[i]
 
-  constructor(x, y) {
-    this.x = x
-    this.y = y
-  }
-  add(p) {
-    return new Point(this.x + p.x, this.y + p.y)
-  }
-  subtract(p) {
-    return new Point(this.x - p.x, this.y - p.y)
-  }
-  length() {
-    return Math.sqrt(this.x * this.x + this.y * this.y)
-  }
-  normalize(length = 0) {
-    const factor = length / this.length()
-    return new Point(this.x * factor, this.y * factor)
-  }
-}
-
-export class JellyPoint {
-  x: number
-  y: number
-  offsetX: number
-  offsetY: number
-
-  command: string
-
-  coord: {
-    x: number,
-    y: number,
-    x1?: number,
-    y1?: number,
-    x2?: number,
-    y2?: number,
-  }
-
-  settings: Config
-
-  constructor([command, ...coord]: PathPoint, settings: Config) {
-    this.command = command
     if (command === "M") {
       const [x, y] = coord
-      this.x = x
-      this.y = y
-      this.coord = { x, y }
+      const x0 = x
+      const y0 = y
+      wobblyPoints.push({ command, cx1: 0, cy1: 0, cx2: 0, cy2: 0, x0, y0, x, y, dx, dy })
     }
     else {
-      const [x1, y1, x2, y2, x, y] = coord
-      this.x = x
-      this.y = y
-      this.coord = { x, y, x1, y1, x2, y2 }
+      const [cx1, cy1, cx2, cy2, x, y] = coord
+      const x0 = x
+      const y0 = y
+      wobblyPoints.push({ command, cx1, cy1, cx2, cy2, x0, y0, x, y, dx, dy })
     }
-    this.settings = { ...settings }
-    this.offsetX = 0
-    this.offsetY = 0
   }
+  return wobblyPoints
+}
 
-  update(mouseX: number = 0, mouseY: number = 0) {
-    if (!mouseX || !mouseY) {
-      return
-    }
-    this.offsetX += (this.coord.x - this.x) / this.settings.elasticity
-    this.offsetY += (this.coord.y - this.y) / this.settings.elasticity
+export function updatePoints(mouse: MouseCoord, config: Config, points: WobblyPoint[]) {
 
-    const delta = new Point(this.x, this.y).subtract({ x: mouseX, y: mouseY })
-
-    if (delta.length() <= this.settings.radius) {
-      const a = Math.atan2(delta.y, delta.x)
-      this.offsetX += (Math.cos(a) * this.settings.radius - delta.x) * (1 - this.settings.damping)
-      this.offsetY += (Math.sin(a) * this.settings.radius - delta.y) * (1 - this.settings.damping)
-    }
-
-    this.offsetX *= 1 - this.settings.viscosity
-    this.offsetY *= 1 - this.settings.viscosity
-    if (Math.abs(this.offsetX) < .001) {
-      this.offsetX = 0
-    }
-    if (Math.abs(this.offsetY) < .001) {
-      this.offsetY = 0
-    }
-
-    this.x += this.offsetX
-    this.y += this.offsetY
+  const { mouseX, mouseY } = mouse
+  if (!mouseX || !mouseY) {
+    return points
   }
+  const { elasticity, damping, radius, viscosity } = config
 
-  toSVG() {
-    if (this.command === "M") {
-      return `M${this.x},${this.y}`
+  for (let i = 0; i < points.length; i++) {
+    const p = points[i]
+    p.dx += (p.x0 - p.x) / elasticity
+    p.dy += (p.y0 - p.y) / elasticity
+
+    const dx = p.x - mouseX
+    const dy = p.y - mouseY
+
+    const dist = Math.sqrt(dx * dx + dy * dy)
+
+    if (dist <= radius) {
+      const a = Math.atan2(dy, dx)
+      p.dx += (Math.cos(a) * radius - dx) * (1 - damping)
+      p.dy += (Math.sin(a) * radius - dy) * (1 - damping)
+    }
+
+    p.dx *= 1 - viscosity
+    p.dy *= 1 - viscosity
+    if (Math.abs(p.dx) < .001) {
+      p.dx = 0
+    }
+
+    if (Math.abs(p.dy) < .001) {
+      p.dy = 0
+    }
+
+    p.x += p.dx
+    p.y += p.dy
+    p.cx1 += p.dx
+    p.cy1 += p.dy
+    p.cx2 += p.dx
+    p.cy2 += p.dy
+
+  }
+  return points
+}
+
+export function pointsToSvg(points: WobblyPoint[]): string {
+  let out = ""
+  for (let i = 0; i < points.length; i++) {
+    const { command, x, y } = points[i]
+    if (command === "M") {
+      out += `M${x},${y}`
     }
     else {
-      return `${this.command}${this.x},${this.y} ${this.x},${this.y} ${this.x},${this.y}`
+      out += ` ${command}${x},${y} ${x},${y} ${x},${y}`
     }
   }
+  return out
 }

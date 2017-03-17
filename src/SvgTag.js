@@ -1,10 +1,7 @@
 /* @flow */
 import React from "react"
 
-type MouseCoord = {
-  mouseX: number,
-  mouseY: number
-}
+import type { MouseCoord } from "./types"
 
 type Point = {
   x: number,

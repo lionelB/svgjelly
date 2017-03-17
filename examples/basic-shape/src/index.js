@@ -21,7 +21,7 @@ const styles = {
 
 ReactDOM.render(
   <div style={styles.container}>
-    <Jelly width="100%" height="100%" />
+    <Jelly debug width="100%" height="100%" />
   </div>
   ,
   document.getElementById("root")
